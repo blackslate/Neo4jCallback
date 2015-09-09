@@ -18,6 +18,16 @@ var click =
   "WHERE a.name = {name} " +
   "RETURN b"
 
+// The following call is made both on the server and ont the client.
+var environment = (Meteor.isClient) ? "client" : "server"
+console.log("callbackTest running on "+environment)
+var callbackTest = Meteor.neo4j.query('MATCH (n:Node) RETURN n, count(n)', null, testCallback);
+console.log("Done")
+
+function testCallback(error, data) {
+  console.log("testCallback on " + environment, error, data)
+}
+
 
 if (Meteor.isClient) {
   Session.setDefault("name", "Hello")
